@@ -1,0 +1,112 @@
+ACTUALIZAR PRECIO PRODUCTO
+
+create or replace NONEDITIONABLE PROCEDURE actualizar_precio_producto(
+    p_cod_producto IN VARCHAR,         
+    p_nuevo_precio IN NUMBER       
+) IS
+BEGIN
+
+    UPDATE productos
+    SET precio_unitario = p_nuevo_precio
+    WHERE cod_producto = p_cod_producto;
+
+END actualizar_precio_producto;
+
+---------------------------------------------------------------------
+
+CALCULAR FACTORIAL
+
+create or replace NONEDITIONABLE FUNCTION calcular_factorial(n IN NUMBER)
+RETURN VARCHAR2 IS
+    factorial NUMBER := 1;
+    resultado VARCHAR2(100);
+BEGIN
+    IF n < 0 THEN
+        RETURN 'El numero no puede ser negativo';
+    END IF;
+    IF n > 57 THEN 
+        RETURN 'El número es demasiado grande para calcular su factorial, lo cual se aproxima a Infinito';
+    END IF;
+    IF n = 0 THEN
+        factorial := 1;
+    ELSE
+        FOR i IN 1..n LOOP
+            factorial := factorial * i;
+        END LOOP;
+    END IF;
+
+    resultado := 'El factorial de ' || n || ' es ' || factorial;
+    RETURN resultado;
+END;
+
+--------------------------------------------------------------------------------
+CALCULAR MCD 
+
+create or replace NONEDITIONABLE FUNCTION calcular_mcd(a IN NUMBER, b IN NUMBER)
+RETURN VARCHAR2 IS
+    num1 NUMBER := a;  
+    num2 NUMBER := b;
+    mcd NUMBER := 1;
+    i NUMBER := 1;
+BEGIN
+
+    WHILE i < 9 LOOP
+        IF MOD(num1, i) = 0 AND MOD(num2, i) = 0 THEN
+            mcd := mcd * i;
+            num1 := FLOOR( num1 / i);
+            num2 := FLOOR( num2 / i);
+            i := 1;
+        END IF;
+
+        i := i+1;
+    END LOOP;
+
+    return 'El MCD de ' || a || ' y ' || b || ' es ' || mcd;
+END;
+
+---------------------------------------------------------------------------------
+VERIFICAR SI ES PRIMO
+
+create or replace NONEDITIONABLE FUNCTION es_primo(n IN NUMBER)
+RETURN VARCHAR2 IS
+    es_primo_msg VARCHAR2(100);
+BEGIN
+    IF n <= 1 THEN
+        es_primo_msg := 'El número no es primo.';
+    ELSE
+        FOR i IN 2..FLOOR(SQRT(n)) LOOP
+            IF MOD(n, i) = 0 THEN
+                es_primo_msg := 'El número '||n|| ' no es primo.';
+                RETURN es_primo_msg;
+            END IF;
+        END LOOP;
+        es_primo_msg := 'El número '|| n || ' es primo.';
+    END IF;
+    RETURN es_primo_msg;
+END;
+-------------------------------------------------------------------------------------
+
+SERIE FIBONACCI
+
+create or replace NONEDITIONABLE FUNCTION serie_fibonacci(n IN NUMBER)
+RETURN VARCHAR2 IS
+    fibonacci VARCHAR2(4000) := '0';
+    a NUMBER := 0;
+    b NUMBER := 1;
+    temp NUMBER;
+BEGIN
+    IF n <= 0 THEN
+        RETURN 'Valor no válido.';
+    ELSIF n = 1 THEN
+        RETURN fibonacci;
+    ELSE
+        fibonacci := fibonacci || ', 1';
+        FOR i IN 3..n LOOP
+            temp := a + b;
+            a := b;
+            b := temp;
+            fibonacci := fibonacci || ', ' || temp;
+        END LOOP;
+    END IF;
+    RETURN 'Serie Fibonacci de '||n||' posiciones: '||fibonacci; 
+END;
